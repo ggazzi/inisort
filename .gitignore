@@ -1,0 +1,30 @@
+dist/
+doc/
+org/
+tmp/
+.stack-work/
+*.hp
+*.prof
+*.xsl
+*.orig
+m.txt
+mpf.txt
+*.swp
+hellow.*
+*travis.log
+*.tix
+
+# Cabal stuff
+.cabal-sandbox
+cabal.sandbox.config
+
+images/.directory
+
+
+# HSpec stuff
+.hspec-failures
+
+
+#Emacs stuff
+TAGS
+*#
