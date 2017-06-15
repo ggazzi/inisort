@@ -7,9 +7,9 @@ import           Data.Attoparsec.Text
 import qualified Data.Char                  as Char
 import           Data.HashMap.Strict        (HashMap)
 import qualified Data.HashMap.Strict        as HashMap
-import           Data.Ini                   (Ini (..), keyValueParser,
-                                             readIniFile)
+import           Data.Ini                   (Ini (..), keyValueParser, readIniFile)
 import qualified Data.List                  as List
+import           Data.Ord                   (comparing)
 import           Data.Semigroup             ((<>))
 import           Data.Text                  (Text)
 import qualified Data.Text                  as Text
@@ -95,11 +95,15 @@ sortEntriesAs lines sections =
       missingEntries entries ++ beginSection sections name rest
     sortSection sections entries (line : rest) = line : sortSection sections entries rest
 
-    missingEntries =
-      (Blank:) . (++[Blank]) . map (uncurry Entry) . HashMap.toList
+    missingEntries entries
+      | HashMap.null entries = []
+      | otherwise = (Comment "BEGIN new entries":) . (++[Comment "END new entries"])
+          . map (uncurry Entry) $ HashMap.toList entries
 
-    missingSections =
-      concatMap missingSection . HashMap.toList
+    missingSections sections
+      | HashMap.null sections = []
+      | otherwise = ([Blank, Comment "BEGIN new sections"]++)
+          . concatMap missingSection . List.sortBy (comparing fst) $ HashMap.toList sections
 
     missingSection (name, entries) =
-      Blank : Section name : map (uncurry Entry) (HashMap.toList entries) ++ [Blank]
+      Blank : Section name : map (uncurry Entry) (HashMap.toList entries)
