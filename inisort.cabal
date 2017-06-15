@@ -17,12 +17,13 @@ cabal-version:       >=1.10
 
 executable inisort
   main-is:             Main.hs
-  -- other-modules:
+  other-modules:       Data.Ini.Line
   -- other-extensions:
   build-depends:       base >=4.9 && <4.10,
                        attoparsec >=0.13 && <0.14,
                        bytestring >=0.10 && <0.11,
                        ini >=0.3.5 && <0.4,
+                       optparse-applicative >=0.13 && <0.14,
                        text >=1.2 && <1.3,
                        unordered-containers >=0.2.8 && <0.3
   hs-source-dirs:      src
